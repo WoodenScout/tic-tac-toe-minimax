@@ -80,3 +80,36 @@ class Game:
                     best = score
         
         return best
+    
+    def alphabeta(self, player:str = 'X', depth:int = 9, alpha:float = float('-inf'), beta:float = float('inf')):
+        if player == 'X':
+            best = [-1, -1, -10] # row, col, score
+        else:
+            best = [-1, -1, 10] # row, col, score
+        
+        if depth == 0 or self.check_winner() is not None:
+            score = [-1, -1, self.evaluate()] # row, col, score
+            return score
+        
+        for move in self.get_moves():
+            row, col = move
+            self.make_move(row, col, player) # make the move
+            score = self.minimax('X' if player == 'O' else 'O', depth - 1)
+            self.make_move(row, col, None) # undo the move
+            score[0], score[1] = row, col
+
+            if player == 'X':
+                if score[2] > best[2]:
+                    best = score
+                if score[2] > beta:
+                    break
+                alpha = max(alpha, score[2])
+
+            else:
+                if score[2] < best[2]:
+                    best = score
+                if score[2] < alpha:
+                    break
+                beta = min(beta, score[2])
+        
+        return best

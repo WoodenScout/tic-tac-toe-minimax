@@ -4,8 +4,9 @@ from game import Game
 
 
 def main():
-    screen = pygame.display.set_mode((600, 600))
-    board = Board(screen, 600, 600, 'X')
+    size = (600, 600)
+    screen = pygame.display.set_mode(size)
+    board = Board(screen, size[0], size[1], 'X')
     game = Game(board)
 
     running = True
@@ -19,6 +20,7 @@ def main():
                 board.handle_click(*pos)
             if event.type == pygame.KEYDOWN:
                 print(game.minimax())
+                print(game.alphabeta())
 
         if game.check_winner() is not None:
             if (winner := game.check_winner()) in ['O', 'X']:
